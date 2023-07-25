@@ -33,5 +33,6 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   sandbox_dt:
     # Config indicated by + and applies to all files under models/example/
-    example:
-      +materialized: view
+    my_mv:
+      +enabled: false
+      
