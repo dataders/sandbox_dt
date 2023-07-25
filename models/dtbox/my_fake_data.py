@@ -29,5 +29,4 @@ def model(dbt, session):
         .reset_index(drop=True)
     )
 
-    # return final dataset (Pandas DataFrame)
     return df
