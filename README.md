@@ -12,6 +12,7 @@ the approach is:
 2. make a view that selects from above table, but filters to only include rows whose timestamps are now in the past (`WHERE DATETIME <= SYSDATE()`)
 3. build a Dynamic Table on top of the view that could "catch" the new rows in the view result and append them to the table
 
+for sans dbt reproduction see, [all-sql.md]()
 
 ## result
 
