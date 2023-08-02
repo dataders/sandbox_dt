@@ -1,16 +1,3 @@
-# repro for sasha
-
-see [`all_the_code.sql`](./all_the_code.sql) for pure SQL script that can be copied and pasted
-
-## the sql
-
-### `my_fake_data`
-
-#### make stored procedure
-
-<details><summary>Python SPROC def</summary>
-
-```sql
 WITH my_fake_data__dbt_sp AS PROCEDURE ()
 
 RETURNS STRING
@@ -150,13 +137,7 @@ def main(session):
 
 $$
 CALL my_fake_data__dbt_sp();
-```
 
-</details>
-
-#### stuff `.write_pandas()` does
-
-```sql
 CREATE TEMP STAGE /* Python:snowflake.connector.pandas_tools.write_pandas() */
 IF NOT EXISTS
 "TEST_DB"."DBT_AJS"."SNOWPARK_TEMP_STAGE_KSDSJYXGPH"
@@ -169,7 +150,7 @@ IF NOT EXISTS
 TYPE=PARQUET COMPRESSION=auto;
 
 CREATE TEMPORARY TABLE IF NOT EXISTS "TEST_DB"."DBT_AJS"."SNOWPARK_TEMP_TABLE_CKY6M1LI1F" (
-    "DATETIME" TIMESTAMP_NTZ, "COLOR" TEXT) /* Python:snowflake.connector.pandas_tools.write_pandas() */
+    "DATETIME" TIMESTAMP_NTZ, "COLOR" TEXT); /* Python:snowflake.connector.pandas_tools.write_pandas() */
 
 COPY INTO "TEST_DB"."DBT_AJS"."SNOWPARK_TEMP_TABLE_CKY6M1LI1F"
 /* Python:snowflake.connector.pandas_tools.write_pandas() */ (
@@ -183,28 +164,15 @@ FROM (
 FILE_FORMAT=(TYPE=PARQUET COMPRESSION=auto BINARY_AS_TEXT=FALSE)
 PURGE=TRUE
 ON_ERROR=abort_statement;
-```
 
-#### actual table creation
-
-```sql
 CREATE OR  REPLACE TABLE TEST_DB.dbt_ajs.my_fake_data AS
-    SELECT * FROM ( SELECT * FROM ("TEST_DB"."DBT_AJS"."SNOWPARK_TEMP_TABLE_CKY6M1LI1F"))
-```
+    SELECT * FROM ( SELECT * FROM ("TEST_DB"."DBT_AJS"."SNOWPARK_TEMP_TABLE_CKY6M1LI1F"));
 
-### `my_view`
-
-```sql
 create or replace view TEST_DB.dbt_ajs.my_view as (
-
     SELECT * FROM TEST_DB.dbt_ajs.my_fake_data
     WHERE DATETIME <= SYSDATE()
 );
-```
 
-### `my_dt`
-
-```sql
 drop dynamic table if exists "TEST_DB"."DBT_AJS"."MY_DT";
 
 create or replace dynamic table TEST_DB.dbt_ajs.my_dt
@@ -214,7 +182,5 @@ create or replace dynamic table TEST_DB.dbt_ajs.my_dt
         SELECT * FROM TEST_DB.dbt_ajs.my_view
 );
 
-alter dynamic table TEST_DB.dbt_ajs.my_dt refresh
-```
+alter dynamic table TEST_DB.dbt_ajs.my_dt refresh;
 
-###
