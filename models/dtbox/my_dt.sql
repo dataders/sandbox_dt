@@ -2,7 +2,7 @@
   config(
     materialized = 'dynamic_table',
     target_lag = '1 minute',
-    warehouse = 'DBT_TESTING'
+    snowflake_warehouse = 'DBT_TESTING'
     )
 }}
 
